@@ -576,10 +576,17 @@ INSERT INTO `employee` VALUES (1,'Rianna','Gilmore','RG@maxdvdstore.se',NULL),(2
 
 INSERT  INTO `directors` VALUES (1,7,1),(2,8,2),(3,9,3),(4,13,4),(5,17,5),(6,21,6),(7,25,7),(8,29,8),(9,34,9),(10,37,10);
 
+INSERT INTO `JohnnesL`.`order` (`idCustomer`, `idEmployee`, `idDvd`) VALUES ('1', '2', '3');
+INSERT INTO `JohnnesL`.`order` (`idCustomer`, `idEmployee`, `idDvd`) VALUES ('3', '4', '5');
+INSERT INTO `JohnnesL`.`order` (`idCustomer`, `idEmployee`, `idDvd`) VALUES ('5', '2', '6');
+INSERT INTO `JohnnesL`.`order` (`idCustomer`, `idEmployee`, `idDvd`) VALUES ('1', '6', '7');
+INSERT INTO `JohnnesL`.`order` (`idCustomer`, `idEmployee`, `idDvd`) VALUES ('8', '9', '10');
+INSERT INTO `JohnnesL`.`order` (`idCustomer`, `idEmployee`, `idDvd`) VALUES ('7', '7', '1');
+INSERT INTO `JohnnesL`.`order` (`idCustomer`, `idEmployee`, `idDvd`) VALUES ('9', '1', '2');
 -- -----------------------------------------------------
--- VIEW
+-- updates to model
 -- -----------------------------------------------------
--- update Tabel movie details to with bool to check if the movie is for rent or not. Plus update of dummmie data
+
 ALTER TABLE `JohnnesL`.`movieDetails`
 ADD COLUMN `ForRentOrNot` TINYINT NULL DEFAULT 0 AFTER `movieRealeseYear`;
 UPDATE `JohnnesL`.`movieDetails` SET `ForRentOrNot`='1' WHERE `idMovieDetails`='1';
@@ -592,10 +599,19 @@ UPDATE `JohnnesL`.`movieDetails` SET `ForRentOrNot`='1' WHERE `idMovieDetails`='
 UPDATE `JohnnesL`.`movieDetails` SET `ForRentOrNot`='1' WHERE `idMovieDetails`='8';
 UPDATE `JohnnesL`.`movieDetails` SET `ForRentOrNot`='1' WHERE `idMovieDetails`='9';
 
-SELECT * FROM JohnnesL.movieDetails WHERE ForRentOrNot IS TRUE;
+-- -----------------------------------------------------
+-- VIEW
+-- -----------------------------------------------------
 
 CREATE VIEW `movies_for_rent` AS
 SELECT * FROM JohnnesL.movieDetails WHERE ForRentOrNot IS TRUE;
+
+CREATE VIEW `movie_on_loan` AS
+SELECT concat(c.firstName,' ',c.lastName) customer,concat(e.firstName,' ',e.lastName) Employee, Detail.movieName FROM JohnnesL.`order`
+LEFT JOIN customer c ON `order`.idCustomer = c.idCustomer
+LEFT JOIN employee e ON `order`.idEmployee = e.idEmployee
+LEFT JOIN dvdMovie dM ON `order`.idDvd = dM.idDvdMovie
+LEFT JOIN movieDetails Detail ON dM.idMovieDetails = Detail.idMovieDetails WHERE returnDate IS NULL;
 
 -- -----------------------------------------------------
 -- PROCEDURE
@@ -608,4 +624,4 @@ LEFT JOIN movieGenre mG ON movieDetails.idMovieDetails = mG.idMovieDetails
 LEFT JOIN genre g ON mG.idGenre = g.idGenre WHERE genreName = genre_Name;
 END ;
 
-CALL get_movie_by_genre('drama')
+
