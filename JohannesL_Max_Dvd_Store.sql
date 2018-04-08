@@ -613,6 +613,13 @@ LEFT JOIN employee e ON `order`.idEmployee = e.idEmployee
 LEFT JOIN dvdMovie dM ON `order`.idDvd = dM.idDvdMovie
 LEFT JOIN movieDetails Detail ON dM.idMovieDetails = Detail.idMovieDetails WHERE returnDate IS NULL;
 
+CREATE VIEW `Late_Movies` AS
+SELECT Detail.movieName, concat(c.firstName,' ',c.lastName)FullName FROM JohnnesL.`order` o
+LEFT JOIN customer c ON o.idCustomer = c.idCustomer
+LEFT JOIN dvdMovie dM ON o.idDvd = dM.idDvdMovie
+LEFT JOIN movieDetails Detail ON dM.idMovieDetails = Detail.idMovieDetails
+WHERE datediff(orderDate, now()) > 4;
+
 -- -----------------------------------------------------
 -- PROCEDURE
 -- -----------------------------------------------------
@@ -623,5 +630,7 @@ SELECT movieName, genreName FROM JohnnesL.movieDetails
 LEFT JOIN movieGenre mG ON movieDetails.idMovieDetails = mG.idMovieDetails
 LEFT JOIN genre g ON mG.idGenre = g.idGenre WHERE genreName = genre_Name;
 END ;
+
+
 
 
