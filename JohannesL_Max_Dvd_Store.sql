@@ -642,3 +642,22 @@ CREATE PROCEDURE check_out_movie(IN customerID INT,IN EmployeeID INT,IN dvdID IN
   BEGIN
     INSERT INTO `JohnnesL`.`order` (`idCustomer`, `idEmployee`, `idDvd`) VALUES (customerID, EmployeeID, dvdID);
   END;
+
+
+-- -----------------------------------------------------
+-- FUNCTION
+-- -----------------------------------------------------
+
+CREATE FUNCTION late_or_not(dvdID INT) RETURNS BOOL
+BEGIN
+  DECLARE orderid DATETIME;
+  DECLARE  dateBool BOOL;
+SELECT orderDate INTO orderid FROM JohnnesL.`order` WHERE `order`.idDvd AND returnDate is NULL;
+IF DATEDIFF(orderid,now()) > 4 THEN SET dateBool = TRUE;
+ELSE SET dateBool = FALSE;
+  END IF;
+
+  RETURN dateBool;
+END;
+
+
