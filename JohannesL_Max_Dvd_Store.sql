@@ -599,6 +599,10 @@ UPDATE `JohnnesL`.`movieDetails` SET `ForRentOrNot`='1' WHERE `idMovieDetails`='
 UPDATE `JohnnesL`.`movieDetails` SET `ForRentOrNot`='1' WHERE `idMovieDetails`='8';
 UPDATE `JohnnesL`.`movieDetails` SET `ForRentOrNot`='1' WHERE `idMovieDetails`='9';
 
+ALTER TABLE `JohnnesL`.`order`
+CHANGE COLUMN `returnDate` `returnDate` DATETIME NULL DEFAULT NULL ,
+ADD COLUMN `lateORNot` TINYINT NULL DEFAULT NULL AFTER `orderDate`;
+
 -- -----------------------------------------------------
 -- VIEW
 -- -----------------------------------------------------
@@ -643,6 +647,17 @@ CREATE PROCEDURE check_out_movie(IN customerID INT,IN EmployeeID INT,IN dvdID IN
     INSERT INTO `JohnnesL`.`order` (`idCustomer`, `idEmployee`, `idDvd`) VALUES (customerID, EmployeeID, dvdID);
   END;
 
+CREATE PROCEDURE return_movie(IN dvdID INT)
+  BEGIN
+    DECLARE orderID INT;
+
+    SELECT idOrder into orderID FROM JohnnesL.`order` WHERE `order`.idDvd = dvdID AND returnDate is NULL LIMIT 1;
+    UPDATE JohnnesL.`order`
+      SET `order`.returnDate = now(), `order`.lateORNot = late_or_not(dvdID)
+    WHERE `order`.idOrder = dvdID;
+
+
+  END;
 
 -- -----------------------------------------------------
 -- FUNCTION
@@ -652,12 +667,12 @@ CREATE FUNCTION late_or_not(dvdID INT) RETURNS BOOL
 BEGIN
   DECLARE orderid DATETIME;
   DECLARE  dateBool BOOL;
-SELECT orderDate INTO orderid FROM JohnnesL.`order` WHERE `order`.idDvd AND returnDate is NULL;
+SELECT orderDate INTO orderid FROM JohnnesL.`order` WHERE `order`.idDvd  = dvdID AND returnDate is NULL LIMIT 1;
 IF DATEDIFF(orderid,now()) > 4 THEN SET dateBool = TRUE;
 ELSE SET dateBool = FALSE;
   END IF;
-
   RETURN dateBool;
 END;
+
 
 
