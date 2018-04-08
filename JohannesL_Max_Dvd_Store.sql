@@ -638,6 +638,7 @@ LEFT JOIN genre g ON mG.idGenre = g.idGenre WHERE genreName = genre_Name;
 END ;
 
 
-
-
-
+CREATE PROCEDURE check_out_movie(IN customerID INT,IN EmployeeID INT,IN dvdID INT)
+  BEGIN
+    INSERT INTO `JohnnesL`.`order` (`idCustomer`, `idEmployee`, `idDvd`) VALUES (customerID, EmployeeID, dvdID);
+  END;
