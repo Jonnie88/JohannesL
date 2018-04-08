@@ -620,6 +620,12 @@ LEFT JOIN dvdMovie dM ON o.idDvd = dM.idDvdMovie
 LEFT JOIN movieDetails Detail ON dM.idMovieDetails = Detail.idMovieDetails
 WHERE datediff(orderDate, now()) > 4;
 
+CREATE VIEW `Top_employee`  AS
+SELECT concat(e.firstName,' ',e.lastName) fullname , count(`order`.idOrder) Total_Sales FROM JohnnesL.`order`
+LEFT JOIN employee e ON `order`.idEmployee = e.idEmployee
+GROUP BY `order`.idEmployee
+ORDER BY Total_Sales DESC ;
+
 -- -----------------------------------------------------
 -- PROCEDURE
 -- -----------------------------------------------------
@@ -630,6 +636,7 @@ SELECT movieName, genreName FROM JohnnesL.movieDetails
 LEFT JOIN movieGenre mG ON movieDetails.idMovieDetails = mG.idMovieDetails
 LEFT JOIN genre g ON mG.idGenre = g.idGenre WHERE genreName = genre_Name;
 END ;
+
 
 
 
