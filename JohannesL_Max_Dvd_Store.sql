@@ -577,7 +577,7 @@ INSERT INTO `employee` VALUES (1,'Rianna','Gilmore','RG@maxdvdstore.se',NULL),(2
 INSERT  INTO `directors` VALUES (1,7,1),(2,8,2),(3,9,3),(4,13,4),(5,17,5),(6,21,6),(7,25,7),(8,29,8),(9,34,9),(10,37,10);
 
 -- -----------------------------------------------------
--- Views
+-- VIEW
 -- -----------------------------------------------------
 -- update Tabel movie details to with bool to check if the movie is for rent or not. Plus update of dummmie data
 ALTER TABLE `JohnnesL`.`movieDetails`
@@ -597,4 +597,15 @@ SELECT * FROM JohnnesL.movieDetails WHERE ForRentOrNot IS TRUE;
 CREATE VIEW `movies_for_rent` AS
 SELECT * FROM JohnnesL.movieDetails WHERE ForRentOrNot IS TRUE;
 
+-- -----------------------------------------------------
+-- PROCEDURE
+-- -----------------------------------------------------
 
+CREATE PROCEDURE get_movie_by_genre(IN genre_Name VARCHAR(50))
+BEGIN
+SELECT movieName, genreName FROM JohnnesL.movieDetails
+LEFT JOIN movieGenre mG ON movieDetails.idMovieDetails = mG.idMovieDetails
+LEFT JOIN genre g ON mG.idGenre = g.idGenre WHERE genreName = genre_Name;
+END ;
+
+CALL get_movie_by_genre('drama')
