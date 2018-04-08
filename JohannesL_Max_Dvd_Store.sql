@@ -579,4 +579,22 @@ INSERT  INTO `directors` VALUES (1,7,1),(2,8,2),(3,9,3),(4,13,4),(5,17,5),(6,21,
 -- -----------------------------------------------------
 -- Views
 -- -----------------------------------------------------
+-- update Tabel movie details to with bool to check if the movie is for rent or not. Plus update of dummmie data
+ALTER TABLE `JohnnesL`.`movieDetails`
+ADD COLUMN `ForRentOrNot` TINYINT NULL DEFAULT 0 AFTER `movieRealeseYear`;
+UPDATE `JohnnesL`.`movieDetails` SET `ForRentOrNot`='1' WHERE `idMovieDetails`='1';
+UPDATE `JohnnesL`.`movieDetails` SET `ForRentOrNot`='1' WHERE `idMovieDetails`='2';
+UPDATE `JohnnesL`.`movieDetails` SET `ForRentOrNot`='1' WHERE `idMovieDetails`='3';
+UPDATE `JohnnesL`.`movieDetails` SET `ForRentOrNot`='1' WHERE `idMovieDetails`='4';
+UPDATE `JohnnesL`.`movieDetails` SET `ForRentOrNot`='1' WHERE `idMovieDetails`='5';
+UPDATE `JohnnesL`.`movieDetails` SET `ForRentOrNot`='1' WHERE `idMovieDetails`='6';
+UPDATE `JohnnesL`.`movieDetails` SET `ForRentOrNot`='1' WHERE `idMovieDetails`='7';
+UPDATE `JohnnesL`.`movieDetails` SET `ForRentOrNot`='1' WHERE `idMovieDetails`='8';
+UPDATE `JohnnesL`.`movieDetails` SET `ForRentOrNot`='1' WHERE `idMovieDetails`='9';
+
+SELECT * FROM JohnnesL.movieDetails WHERE ForRentOrNot IS TRUE;
+
+CREATE VIEW `movies_for_rent` AS
+SELECT * FROM JohnnesL.movieDetails WHERE ForRentOrNot IS TRUE;
+
 
