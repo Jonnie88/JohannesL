@@ -6,7 +6,7 @@ SELECT * FROM JohnnesL.movies_for_rent;
 
 -- Fråga 2: Vilka filmer som finns i en viss genre.
 
-CALL JohnnesL.get_movie_by_genre('drama')
+CALL JohnnesL.get_movie_by_genre('drama');
 
 
 
